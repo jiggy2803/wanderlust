@@ -1,40 +1,68 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
+const { required } = require('joi');
 
 let listingSchema = new Schema({
-    title:{
+    title: {
         type: String,
         required: true
     },
     description: String,
-    image:{
-        type:String,
-        default:"https://unsplash.com/photos/green-plants-on-brown-concrete-building-KLOW1bD616Y ",
-        set:(v)=> v===" " ? 
-        "https://unsplash.com/photos/green-plants-on-brown-concrete-building-KLOW1bD616Y "
-        :v,
+    image: {
+        url: String,
+        filename: String,
     },
-    price:Number,
-    location:String,
-    country:String,
-    reviews:[
+    price: Number,
+    location: String,
+    country: String,
+    reviews: [
         {
-            type:Schema.Types.ObjectId,
-            ref:"Review"
+            type: Schema.Types.ObjectId,
+            ref: "Review"
         }
     ],
-    owner:{
-        type:Schema.Types.ObjectId,
-        ref:"User"
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+    geometry: {
+        type: {
+            type: String, // Don't do `{ location: { type: String } }`
+            enum: ['Point'], // 'location.type' must be 'Point'
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
+    category:{
+        type:String,
+        enum:[
+            "Trending",
+            "Rooms",
+            "Iconic cities",
+            "Mountains",
+            "Top Buildings",
+            "Amazing Pools",
+            "Camping",
+            "Beach Resorts",
+            "Arctic",
+            "Farms",
+            "Top cities",
+            "Most visited"
+        ],
+        required:true
+
     }
 });
 // this post refer to pre(before) , post(after) middlewares
-listingSchema.post("findOneAndDelete",async(req,res)=>{
-    if(listing){
-        await Review.deleteMany({_id: {$in: listing.reviews}});
+listingSchema.post("findOneAndDelete", async (listing) => {
+    if (listing) {
+        await Review.deleteMany({ _id: { $in: listing.reviews } });
     }
 })
 
-const Listing = mongoose.model("Listing",listingSchema);
+const Listing = mongoose.model("Listing", listingSchema);
 module.exports = Listing;

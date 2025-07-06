@@ -4,7 +4,7 @@
         <div class="row mt-3">
             <div class="col-8 offset-2 mt-3">
                 <h3>Edit Listing</h3>
-                <form method="post" action="/listings/<%=listing._id%>?_method=PUT" class="needs-validation" novalidate>
+                <form method="post" action="/listings/<%=listing._id%>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Enter your Title:</label>
                         <input type="text" class="form-control" name="listing[title]" id="title"
@@ -18,10 +18,15 @@
                             <div class="invalid-feedback">Enter valid description</div>
                     </div>
                     <div class="mb-3">
-                        <label for="image" class="form-label">Enter your image:</label>
-                        <input type="text" class="form-control" name="listing[image]" id="image"
-                            value="<%=listing.image%>" required>
-                            <div class="invalid-feedback">Image is needed</div>
+                        <h5>Original Image</h5>
+                        <img src="<%=originalImageUrl%>" alt="" height="300px" width="250">
+                            
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload New Image:</label>
+                        <input type="file" class="form-control" name="listing[image]" id="image"
+                            value="<%=listing.image%>">
+                            
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
@@ -29,12 +34,31 @@
                             <input type="number" class="form-control" name="listing[price]" id="price"
                                 value="<%=listing.price%>" required>
                         </div>
-                        <div class="col-md-8 mb-3">
+                        <div class="dropdown mb-3 col-md-4">
+                            <label for="cars" class="form-label">Choose a Category:</label>
+                            <select class="form-control" name="listing[category]" id="category"value="<%=listing.category%>" required >
+                                <option value="Trending">Trending</option>
+                                <option value="Rooms">Rooms</option>
+                                <option value="Iconic cities">Iconic cities</option>
+                                <option value="Mountains">Mountains</option>
+                                <option value="Top Buildings">Top Buildings</option>
+                                <option value="Amazing Pools">Amazing Pools</option>
+                                <option value="Camping">Camping</option>
+                                <option value="Beach Resorts">Beach Resorts</option>
+                                <option value="Arctic">Arctic</option>
+                                <option value="Farms">Farms</option>
+                                <option value="Top cities">Top cities</option>
+                                <option value="Most visited">Most visited</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="country" class="form-label">Enter your Country:</label>
                             <input type="text" class="form-control" name="listing[country]" id="country"
                                 value="<%=listing.country%>" required>
                                 <div class="invalid-feedback">Enter valid Country</div>
                         </div>
+                        
+                        
                     </div>
 
                     <div class="mb-3">
